@@ -60,7 +60,7 @@ class Juego:
             return True
         except:
             return False
-    def validate(self, userID,password):
+    def validate_csv(self, userID,password):
         self.userID = userID
         self.password = password
         
@@ -77,6 +77,22 @@ class Juego:
                     else:
                         flag= False
         return  flag 
+    
+    def userExists(self, userID):
+       self.userID = userID
+       
+        
+       flag=False
+       with open('Usuario1.csv', 'r') as archivo:
+            lector = csv.reader(archivo)
+            for renglon in lector:               
+                if len(renglon)>0:                    
+                    if renglon[0] == self.userID:
+                        flag = True
+                        break
+                    else:
+                        flag= False
+            return  flag    
     
 
 

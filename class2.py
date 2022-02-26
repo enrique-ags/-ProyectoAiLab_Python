@@ -90,6 +90,8 @@ def new_user():
 
 
 
+def catalog_demon():
+    exec(open("demon.py").read())
     
 
 def game_mode():
@@ -102,8 +104,6 @@ def game_mode():
    btn02 = Button(gm,text='History Mode',fg='blue')   
    btn02.place(x=100,y=25) 
 
-def catalog_demon():
-    exec(open("demon.py").read())
 
 
 
