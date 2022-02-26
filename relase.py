@@ -3,6 +3,7 @@ from tkinter import messagebox
 from turtle import bgcolor
 
 from click import command
+from matplotlib.pyplot import text
 from juego import Juego
 from PIL import ImageTk, Image
 import debugpy
@@ -10,6 +11,10 @@ import time
 import random
 
 #globals
+credentials = []
+username = ""
+userpassword =""
+flag_login = False
 #actions = ['aquajet','ColaFerrea','Cabezazo','Lluvia','aquarder.png']
 #ventaja Roca, Fuego
 #Desventaja Electrico, Planta
@@ -114,49 +119,7 @@ dctRockDog={'rockdog-aquaarder-HojaNavaja':'5','rockdog-mousebug-HojaNavaja':'3'
 'rockdog-mousebug-RocaAfilado':'3','rockdog-mousebug-Velocidad':'2','rockdog-mousebug-ColaFerrea':'2','rockdog-splant-RocaAfilado':'2','rockdog-splant-Velocidad':'2','rockdog-splant-ColaFerrea':'2',
 'rockdog-rockdog-RocaAfilado':'3','rockdog-rockdog-Velocidad':'2','rockdog-rockdog-ColaFerrea':'2'}
 
-def login():
-    userNameE = userNameEntry.get()
-    passwordE = passwordEntry.get()
-    p = Juego()
-    if validate():
-        flag = p.validate(userNameE,passwordE)
-        if flag:
-            clear()
-            game_mode()
-            
-        else:
-            MsgBox = messagebox.askquestion ('User Management','User does not exist, create it?',icon = 'info')
-            if MsgBox == 'yes':
-                open_win()
 
-def login_control():
-    root1 = Tk()
-    root1.geometry("800x600")
-    root1.title("Gamer zone")
-
-    lbl1 = Label(root1,text='UserName: ')
-    lbl1.place(x=10,y=25)
-
-    lbl2 = Label(root1,text='Password: ')
-    lbl2.place(x=10,y=50)
-
-
-    userNameEntry = Entry(root1)
-    userNameEntry.place(x=120, y = 25)
-
-    passwordEntry = Entry(root1,show='*')
-    passwordEntry.place(x=120, y = 50)
-
-
-    btnAccept = Button(root1,text='Login', fg='blue',command=login)
-    btnAccept.place(x=10,y=120)
-
-    btnAccept = Button(root1,text='Cancell', fg='blue')
-    btnAccept.place(x=80,y=120)
-    root1.lift()
-    root1.attributes('-topmost', True)
-    #root1.attributes('-topmost', False)
-    root1.mainloop()
 
 
 
@@ -380,6 +343,8 @@ def BattleField():
         new= Toplevel(root)
         new.geometry("750x450")
         new.title("Battle ground")
+        new.attributes("-topmost", True)
+        
         lblBattleuser = Label(new,text=user_demon,fg='blue' ,font=("Arial", 25))
         lblBattleuser.place(x=300,y=150)
         lblCpuUser = Label(new,text=cpu_demon,fg='red',font=("Arial", 25))
@@ -733,6 +698,7 @@ def getDetails(demon):
     demonCanvas.geometry("1000x250")
     
     demonCanvas.title("Details ")
+    demonCanvas.attributes("-topmost", True)
     lblDemon = Label(demonCanvas,text=l[0])
     lblDemon.place(x=10,y=25)
 
@@ -780,10 +746,7 @@ def getDetails(demon):
 
 root = Tk()
 root.geometry("600x400")
-root.title("Pick your demon")
-
-
-
+root.title("Training Mode")
 ##Aquarder
 lblAqua = Label(root,text='Aquarder')
 lblAqua.place(x=10,y=10)
@@ -862,17 +825,123 @@ lbluser.place(x=10,y=350)
 btnIniciar = Button(root,text='        Start                  ',bg='blue',fg='white',command=BattleField)
 btnIniciar.place(x=250,y=350)
 
+def game_mode():
+   gm= Toplevel(root)
+   gm.geometry("750x250")
+   gm.title("Gamer Mode") 
+
+   btn01 = Button(gm,text='Training Mode',fg='blue')  
+   btn01.place(x=10,y=25) 
+   btn02 = Button(gm,text='History Mode',fg='blue')   
+   btn02.place(x=100,y=25)
+
+def login():
+    global username
+    global userpassword
+    global flag_login
+    global userNameEntry
+    global passwordEntry
+    global root1
+    
+    userNameE = username
+    passwordE = userpassword
+    p = Juego()
+
+    
+    if validate():
+        userExists= p.userExists(userNameE)
+        if userExists:
+            flag = p.validate_csv(userNameE,passwordE)
+            if flag: 
+                flag_login = True  
+                root.attributes("-topmost", True)
+                return flag_login 
+            else:
+                flag_login = False
+                print(flag_login)
+            
+            
+            return flag_login
+        else:
+            MsgBox = messagebox.askquestion ('User Management','User does not exist, create it?',icon = 'info')
+
+          
 
 
 
 
+    
+
+def validate():
+    global username
+    global userpassword
+    global userNameEntry
+    global passwordEntry
+    print(username)
+    print(userpassword)
+    if (username)=="" or (userpassword)=="":
+        messagebox.showerror('Missing userName or password','Missing user name/password, please review',parent=root) 
+        return False   
+    else:
+        
+        return True
+def destroy_parent():
+    root1.destroy()
+def getUserName(user):
+    global username
+    username = user
+
+def getPassword(passw):
+    print(passw)
+    global userpassword
+    userpassword = passw
+    
+print(credentials)
+
+def logon():
+    global username
+    global userpassword
+    global flag_login
+    root1 = Toplevel(root)
+    root1.geometry("800x600")
+    root1.title("Gamer zone")
+    root1.attributes("-topmost", True)
+
+    lblStatuslogin=Label(root1,text='Not logged')
+    lblStatuslogin.place(x=10,y=155)
 
 
+    lbl1 = Label(root1,text='UserName: ')
+    lbl1.place(x=10,y=25)
+
+    lbl2 = Label(root1,text='Password: ')
+    lbl2.place(x=10,y=50)
 
 
+    userNameEntry = Entry(root1,textvariable=username)
+    userNameEntry.place(x=120, y = 25)
 
-login_control()
+    passwordEntry = Entry(root1,show='*',textvariable=userpassword)
+    passwordEntry.place(x=120, y = 50)
+
+
+    btnAccept = Button(root1,text='Login', fg='blue', command=lambda:[getUserName(userNameEntry.get()),getPassword(passwordEntry.get()),login(),quit()])
+    btnAccept.place(x=10,y=120)
+
+    btnAccept = Button(root1,text='Cancell', fg='blue',command=destroy_parent)
+    btnAccept.place(x=80,y=120)
+    def quit():
+        if flag_login==True:
+            root1.destroy()
+        else:
+            lblStatuslogin.config(text='PasswordIncorrect')
+    
+
+
+logon()
+
 root.mainloop()
+
 
 
 
