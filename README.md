@@ -1,6 +1,6 @@
-# -ProyectoAiLab_Python
-# solo incluye modo entrenamiento
-# no tiene optcio para crear nuevos usuarios
-# el usuario es iker, password iker
-ejecutar python .\relase.py
+<p>ProyectoAiLab_Python</p>
+<p>solo incluye modo entrenamiento</p>
+<p>no tiene optcio para crear nuevos usuarios</p>
+<p>el usuario es iker, password iker</p>
+<p>ejecutar python .\relase.py</p>
 
